@@ -118,7 +118,7 @@ namespace Hashmapu
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            arr = new LinkedList<KeyValuePair<TKey, TValue>>[arr.Length]; //creates a new hashmap of the same size
         }
 
         public bool Contains(object key)
