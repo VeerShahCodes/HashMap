@@ -142,7 +142,23 @@ namespace Hashmapu
 
         public void CopyTo(Array array, int index)
         {
-            throw new NotImplementedException();
+            if(array is not LinkedList<KeyValuePair<TKey, TValue>>[] arr)
+            {
+                throw new ArgumentException();
+            }
+            else //only runs if its an array of linked lists
+            {
+                foreach (var LList in arr)
+                {
+                    foreach (var item in LList)
+                    {
+                        array.SetValue(item, index);//copies the value into the array at the index
+                        index++;
+                    }
+                }
+            }
+
+            
         }
 
         public IDictionaryEnumerator GetEnumerator()
