@@ -163,6 +163,7 @@ namespace Hashmapu
 
         public IDictionaryEnumerator GetEnumerator()
         {
+            //loop through all key value pairs and yield return it
             throw new NotImplementedException();
         }
 
