@@ -30,7 +30,7 @@ namespace Hashmapu
         //METHODS
         public void Add(object key, object? value)
         {
-            if(key.GetType() is TKey && value.GetType() is TValue) //only works if the key and value of are a valid type
+            if(key.GetType() is TKey && value?.GetType() is TValue) //only works if the key and value of are a valid type
             {
                 int hashCode = key.GetHashCode();
                 int index = hashCode % arr.Length;
@@ -47,7 +47,7 @@ namespace Hashmapu
                     bool containsKey = false;
                     foreach (var item in arr[index])
                     {
-                        if(item.Key.Equals((TKey)key))
+                        if(item.Key!.Equals((TKey)key))
                         {
                             containsKey = true;
                             break;
@@ -79,7 +79,21 @@ namespace Hashmapu
 
         public bool Contains(object key)
         {
-            throw new NotImplementedException();
+            int hashCode = key.GetHashCode();
+            int index = hashCode % arr.Length;
+            if (arr[index] != null)
+            {
+                foreach (var item in arr[index])
+                {
+                    if (item.Key!.Equals((TKey)key))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return false;
+
         }
 
         public void CopyTo(Array array, int index)
@@ -94,7 +108,20 @@ namespace Hashmapu
 
         public void Remove(object key)
         {
-            throw new NotImplementedException();
+            int hashCode = key.GetHashCode();
+            int index = hashCode % arr.Length;
+            if (arr[index] != null)
+            {
+                foreach (var item in arr[index])
+                {
+                    if (item.Key!.Equals((TKey)key))
+                    {
+                        arr[index].Remove(item);
+                        return;
+                    }
+                }
+            }
+
         }
 
         IEnumerator IEnumerable.GetEnumerator()
