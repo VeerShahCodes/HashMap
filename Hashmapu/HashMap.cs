@@ -15,7 +15,8 @@ namespace Hashmapu
 
         public ICollection Values => throw new NotImplementedException();
 
-        public int Count => throw new NotImplementedException();
+        private int count;
+        public int Count => count;
 
         public bool IsSynchronized => throw new NotImplementedException();
 
@@ -25,6 +26,8 @@ namespace Hashmapu
         public HashMap(LinkedList<KeyValuePair<TKey, TValue>>[] arr)
         {
             this.arr = arr;
+            count = 0;
+            count += (int)arr.LongLength;
             
         }
         //METHODS
@@ -39,6 +42,7 @@ namespace Hashmapu
                 {
                     arr[index] = new LinkedList<KeyValuePair<TKey, TValue>>();
                     arr[index].AddLast(addition);
+                    count++;
 
                 }
                 else
@@ -61,6 +65,7 @@ namespace Hashmapu
                     else//otherwise add new key value pair to list
                     {
                         arr[index].AddLast(addition);
+                        count++;
                     }
                     
                 }
@@ -69,6 +74,45 @@ namespace Hashmapu
             {
                 throw new TypeAccessException();
             }
+
+        }
+
+        public void ReHash()
+        {
+            bool needsToRehash = false;
+            foreach(var item in arr)
+            {
+                if(item.Count == Count) //checks if count of current linked list == count of hashmap and then decides to rehash or not
+                {
+                    needsToRehash = true;
+                    break;
+                }
+            }
+            if (!needsToRehash) return;
+
+            LinkedList<KeyValuePair<TKey, TValue>>[] newArr = new LinkedList<KeyValuePair<TKey, TValue>>[arr.Length * 2]; //creates a new hashmap double the size to rehash
+
+            foreach(var LList in arr)//adds each keypair value into the new hashmap array
+            {
+                foreach (var item in LList)
+                {
+                    int hashCode = item.Key!.GetHashCode();
+                    int index = hashCode % newArr.Length;
+                    if (newArr[index] == null) //checks if there is no linked list at this index and adds a new linked list
+                    {
+                        newArr[index] = new LinkedList<KeyValuePair<TKey, TValue>>();
+                        newArr[index].AddLast(item);
+                    }
+                    else
+                    {
+                        newArr[index].AddLast(item);
+                    }
+                }
+            }
+
+            arr = newArr; //sets the new hashmap to the old one
+
+
 
         }
 
@@ -85,7 +129,7 @@ namespace Hashmapu
             {
                 foreach (var item in arr[index])
                 {
-                    if (item.Key!.Equals((TKey)key))
+                    if (item.Key!.Equals((TKey)key)) //if found
                     {
                         return true;
                     }
@@ -110,13 +154,14 @@ namespace Hashmapu
         {
             int hashCode = key.GetHashCode();
             int index = hashCode % arr.Length;
-            if (arr[index] != null)
+            if (arr[index] != null) //checks if there is a linked list at this index
             {
                 foreach (var item in arr[index])
                 {
-                    if (item.Key!.Equals((TKey)key))
+                    if (item.Key!.Equals((TKey)key))//if current keyval has a key of this key
                     {
-                        arr[index].Remove(item);
+                        arr[index].Remove(item); //remove
+                        count--;
                         return;
                     }
                 }
