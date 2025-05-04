@@ -2,25 +2,17 @@
 
 namespace Hashmapu
 {
-    public class HashMap<TKey,TValue> : IDictionary
+    public class HashMap<TKey, TValue>
     {
         LinkedList<KeyValuePair<TKey, TValue>>[] arr;
-        public object? this[object key] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public bool IsFixedSize => throw new NotImplementedException();
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public TValue? this[TKey key] { get => Get(key); set => Set(key, value!); }
 
-        public ICollection Keys => throw new NotImplementedException();
-
-        public ICollection Values => throw new NotImplementedException();
+        
 
         private int count;
         public int Count => count;
-
-        public bool IsSynchronized => throw new NotImplementedException();
-
-        public object SyncRoot => throw new NotImplementedException();
 
         //CONSTRUCTOR
         public HashMap(LinkedList<KeyValuePair<TKey, TValue>>[] arr)
@@ -28,12 +20,12 @@ namespace Hashmapu
             this.arr = arr;
             count = 0;
             count += (int)arr.LongLength;
-            
+
         }
         //METHODS
         public void Add(object key, object? value)
         {
-            if(key.GetType() is TKey && value?.GetType() is TValue) //only works if the key and value of are a valid type
+            if (key.GetType() is TKey && value?.GetType() is TValue) //only works if the key and value of are a valid type
             {
                 int hashCode = key.GetHashCode();
                 int index = hashCode % arr.Length;
@@ -51,14 +43,14 @@ namespace Hashmapu
                     bool containsKey = false;
                     foreach (var item in arr[index])
                     {
-                        if(item.Key!.Equals((TKey)key))
+                        if (item.Key!.Equals((TKey)key))
                         {
                             containsKey = true;
                             break;
                         }
                     }
 
-                    if(containsKey) //if there is already key of this key
+                    if (containsKey) //if there is already key of this key
                     {
                         throw new Exception();
                     }
@@ -67,7 +59,7 @@ namespace Hashmapu
                         arr[index].AddLast(addition);
                         count++;
                     }
-                    
+
                 }
             }
             else
@@ -80,9 +72,9 @@ namespace Hashmapu
         public void ReHash()
         {
             bool needsToRehash = false;
-            foreach(var item in arr)
+            foreach (var item in arr)
             {
-                if(item.Count == Count) //checks if count of current linked list == count of hashmap and then decides to rehash or not
+                if (item.Count == Count) //checks if count of current linked list == count of hashmap and then decides to rehash or not
                 {
                     needsToRehash = true;
                     break;
@@ -92,7 +84,7 @@ namespace Hashmapu
 
             LinkedList<KeyValuePair<TKey, TValue>>[] newArr = new LinkedList<KeyValuePair<TKey, TValue>>[arr.Length * 2]; //creates a new hashmap double the size to rehash
 
-            foreach(var LList in arr)//adds each keypair value into the new hashmap array
+            foreach (var LList in arr)//adds each keypair value into the new hashmap array
             {
                 foreach (var item in LList)
                 {
@@ -142,7 +134,7 @@ namespace Hashmapu
 
         public void CopyTo(Array array, int index)
         {
-            if(array is not LinkedList<KeyValuePair<TKey, TValue>>[] arr)
+            if (array is not LinkedList<KeyValuePair<TKey, TValue>>[] arr)
             {
                 throw new ArgumentException();
             }
@@ -158,13 +150,7 @@ namespace Hashmapu
                 }
             }
 
-            
-        }
 
-        public IDictionaryEnumerator GetEnumerator()
-        {
-            //loop through all key value pairs and yield return it
-            throw new NotImplementedException();
         }
 
         public void Remove(object key)
@@ -186,9 +172,53 @@ namespace Hashmapu
 
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        private TValue? Get(TKey key)
         {
-            return GetEnumerator();
+            int hashCode = key!.GetHashCode();
+            int index = hashCode % arr.Length;
+            if (arr[index] != null)
+            {
+                foreach (var item in arr[index])
+                {
+                    if (item.Key!.Equals(key)) //if found
+                    {
+                        return item.Value!;
+                    }
+                }
+                return default;
+            }
+            return default;
+        }
+
+        private void Set(TKey key, TValue val)
+        {
+            int hashCode = key!.GetHashCode();
+            int index = hashCode % arr.Length;
+            
+            if (arr[index] != null)
+            {
+                var curr = arr[index].First;
+                while(curr != null)
+                {
+                    if (curr.Value.Key!.Equals(key)) //if found
+                    {
+
+                        curr.Value = new KeyValuePair<TKey, TValue>(key, val);
+                        
+                    }
+
+                    curr = curr.Next;
+                }
+
+                return;
+
+
+    
+            }
+            return;
+
+
         }
     }
+
 }
