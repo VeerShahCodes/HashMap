@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hashmapu", "Hashmapu\Hashmapu.csproj", "{CAD1051C-6B3A-4A1B-BEAA-64882625EE17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit", "Unit\Unit.csproj", "{2EE9A9C5-BCEF-4EC5-B2EB-F31978782CB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CAD1051C-6B3A-4A1B-BEAA-64882625EE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAD1051C-6B3A-4A1B-BEAA-64882625EE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAD1051C-6B3A-4A1B-BEAA-64882625EE17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EE9A9C5-BCEF-4EC5-B2EB-F31978782CB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EE9A9C5-BCEF-4EC5-B2EB-F31978782CB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EE9A9C5-BCEF-4EC5-B2EB-F31978782CB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EE9A9C5-BCEF-4EC5-B2EB-F31978782CB1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,67 +9,65 @@ namespace Hashmapu
 
         public TValue? this[TKey key] { get => Get(key); set => Set(key, value!); }
 
-        
+
 
         private int count;
         public int Count => count;
 
         //CONSTRUCTOR
-        public HashMap(LinkedList<KeyValuePair<TKey, TValue>>[] arr)
+        public HashMap()
         {
-            this.arr = arr;
+            arr = new LinkedList<KeyValuePair<TKey, TValue>>[10];
             count = 0;
-            count += (int)arr.LongLength;
 
         }
         //METHODS
-        public void Add(object key, object? value)
+        public void Add(TKey key, TValue value)
         {
-            if (key.GetType() is TKey && value?.GetType() is TValue) //only works if the key and value of are a valid type
+            int hashCode = key.GetHashCode();
+            int index = hashCode % arr.Length;
+            KeyValuePair<TKey, TValue> addition = new KeyValuePair<TKey, TValue>((TKey)key, (TValue)value);
+            if (arr[index] == null) //checks if there is no linked list at this index and adds a new linked list
             {
-                int hashCode = key.GetHashCode();
-                int index = hashCode % arr.Length;
-                KeyValuePair<TKey, TValue> addition = new KeyValuePair<TKey, TValue>((TKey)key, (TValue)value);
-                if (arr[index] == null) //checks if there is no linked list at this index and adds a new linked list
-                {
-                    arr[index] = new LinkedList<KeyValuePair<TKey, TValue>>();
-                    arr[index].AddLast(addition);
-                    count++;
+                arr[index] = new LinkedList<KeyValuePair<TKey, TValue>>();
+                arr[index].AddLast(addition);
+                count++;
 
-                }
-                else
-                {
-                    //check if there is already key of this key in the linked list
-                    bool containsKey = false;
-                    foreach (var item in arr[index])
-                    {
-                        if (item.Key!.Equals((TKey)key))
-                        {
-                            containsKey = true;
-                            break;
-                        }
-                    }
-
-                    if (containsKey) //if there is already key of this key
-                    {
-                        throw new Exception();
-                    }
-                    else//otherwise add new key value pair to list
-                    {
-                        arr[index].AddLast(addition);
-                        count++;
-                    }
-
-                }
             }
             else
             {
-                throw new TypeAccessException();
+                //check if there is already key of this key in the linked list
+                bool containsKey = false;
+                foreach (var item in arr[index])
+                {
+                    if (item.Key!.Equals((TKey)key))
+                    {
+                        containsKey = true;
+                        break;
+                    }
+                }
+
+                if (containsKey) //if there is already key of this key
+                {
+                    throw new Exception();
+                }
+                else//otherwise add new key value pair to list
+                {
+                    arr[index].AddLast(addition);
+                    count++;
+                }
+
+
+            }
+
+            if(Count == arr.LongLength)
+            {
+                ReHash();
             }
 
         }
 
-        public void ReHash()
+        private void ReHash()
         {
             bool needsToRehash = false;
             foreach (var item in arr)
@@ -153,7 +151,7 @@ namespace Hashmapu
 
         }
 
-        public void Remove(object key)
+        public void Remove(TKey key)
         {
             int hashCode = key.GetHashCode();
             int index = hashCode % arr.Length;
@@ -194,30 +192,23 @@ namespace Hashmapu
         {
             int hashCode = key!.GetHashCode();
             int index = hashCode % arr.Length;
-            
+
             if (arr[index] != null)
             {
                 var curr = arr[index].First;
-                while(curr != null)
+                while (curr != null)
                 {
                     if (curr.Value.Key!.Equals(key)) //if found
                     {
 
                         curr.Value = new KeyValuePair<TKey, TValue>(key, val);
-                        
+
                     }
 
                     curr = curr.Next;
                 }
-
-                return;
-
-
-    
             }
             return;
-
-
         }
     }
 
